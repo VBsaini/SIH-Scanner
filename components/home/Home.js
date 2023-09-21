@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Button } from "@react-native-material/core";
 import { Dimensions } from "react-native";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -15,7 +16,7 @@ export default function Home() {
       />
       <View style={styles.innerContainer}>
         <Text style={{ color: "#fff" }}>
-          Open up App.js yello asdto start working on your app!
+          Click the scan button below to scan your image
         </Text>
         <View style={{ marginHorizontal: 40, marginTop: 20, height: 36 }}>
           <Button
