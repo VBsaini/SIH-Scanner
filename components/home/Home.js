@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Button } from "@react-native-material/core";
 import { Dimensions } from "react-native";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -30,6 +31,9 @@ export default function Home() {
             }}
             size="Large"
             title="Scan"
+            leading={(props) => (
+              <Icon name="scan-helper" style={{ marginRight: 5 }} {...props} />
+            )}
           />
         </View>
         <View style={{ marginHorizontal: 40, marginTop: 20 }}>
@@ -41,6 +45,9 @@ export default function Home() {
             }}
             size="large"
             title="How to Scan"
+            leading={(props) => (
+              <Icon name="information" style={{ marginRight: 5 }} {...props} />
+            )}
           />
         </View>
       </View>
