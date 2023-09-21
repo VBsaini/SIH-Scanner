@@ -11,9 +11,9 @@ export default function Home() {
       <View style={styles.overlay} />
       <Image
         style={styles.logo}
-        // source={{
-        //   uri: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1854&q=80",
-        // }}
+        source={{
+          uri: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1854&q=80",
+        }}
         src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1854&q=80"
       />
       <View style={styles.innerContainer}>
@@ -80,17 +80,17 @@ const styles = StyleSheet.create({
   logo: {
     position: "absolute",
     width: windowWidth + 20,
-    height: windowHeight + 50,
-    left: -40,
-    top: -10,
+    height: windowHeight + 100,
+    // left: -40,
+    // top: -10,
   },
   overlay: {
     position: "absolute",
-    width: windowWidth + 20,
+    width: windowWidth + 50,
     height: windowHeight + 50,
     left: -40,
     top: -10,
-    zIndex: 5,
+    zIndex: 9,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
 });
