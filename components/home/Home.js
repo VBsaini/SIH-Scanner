@@ -2,61 +2,69 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Button } from "@react-native-material/core";
 import { Dimensions } from "react-native";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { loadAsync } from "expo-font";
+import { useEffect, useState } from "react";
+
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+const customFonts = {
+  DancingScript: require("../../assets/fonts/DancingScript-Bold.ttf"),
+};
 
 export default function Home() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      await loadAsync(customFonts);
+      setFontsLoaded(true);
+    })();
+  }, []);
+
+  if (!fontsLoaded) return null;
+
   return (
     <View style={styles.container}>
       <View style={styles.overlay} />
       <Image
         style={styles.logo}
-        source={{
-          uri: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1854&q=80",
-        }}
         src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1854&q=80"
       />
       <View style={styles.innerContainer}>
-        <Text style={{ color: "#fff" }}>
-          Open up App.js yello asdto start working on your app!
+        <Text style={styles.heading}>Zephire</Text>
+        <Text style={styles.text}>
+          Click the scan button below to scan your image
         </Text>
-        <View style={{ marginHorizontal: 40, marginTop: 20, height: 50 }}>
+        <View style={{ marginHorizontal: 40, marginTop: 20, height: 36 }}>
           <Button
             style={{
               backgroundColor: "#327a14",
-              // paddingVertical: 10,
               flex: 1,
-              // alignSelf: "center",
-              // minHeight: 50,
             }}
-            //   titleStyle={{ fontSize: 20 }}
             titleStyle={{
               fontSize: 20,
-              // height: 50,
               alignSelf: "center",
-              //   marginVertical: 10,
             }}
             size="Large"
             title="Scan"
+            leading={(props) => (
+              <Icon name="scan-helper" style={{ marginRight: 5 }} {...props} />
+            )}
           />
         </View>
         <View style={{ marginHorizontal: 40, marginTop: 20 }}>
           <Button
             color="#327a14"
-            style={
-              {
-                // paddingVertical: 10,
-                // alignSelf: "center",
-              }
-            }
-            //   titleStyle={{ fontSize: 20 }}
             titleStyle={{
               fontSize: 20,
               alignSelf: "center",
-              //   marginVertical: 10,
             }}
             size="large"
             title="How to Scan"
+            leading={(props) => (
+              <Icon name="information" style={{ marginRight: 5 }} {...props} />
+            )}
           />
         </View>
       </View>
@@ -74,15 +82,13 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   innerContainer: {
-    // marginHorizontal: 50,
     zIndex: 10,
   },
   logo: {
     position: "absolute",
     width: windowWidth + 20,
-    height: windowHeight + 100,
-    // left: -40,
-    // top: -10,
+    height: windowHeight + 50,
+    top: -10,
   },
   overlay: {
     position: "absolute",
@@ -92,5 +98,18 @@ const styles = StyleSheet.create({
     top: -10,
     zIndex: 9,
     backgroundColor: "rgba(0, 0, 0, 0.4)",
+  },
+  heading: {
+    color: "gold",
+    fontSize: 80,
+    textAlign: "center",
+    marginBottom: 20,
+    fontFamily: "DancingScript",
+  },
+  text: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    fontWeight: "500",
   },
 });
