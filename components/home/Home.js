@@ -81,7 +81,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: windowWidth + 20,
     height: windowHeight + 50,
-    left: -40,
     top: -10,
   },
   overlay: {
