@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 // Screens
 import Home from "./components/home/Home";
+import Plant from "./components/plant/Plant";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ function App() {
         initialRouteName="Home"
       >
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Plant" component={Plant} />
       </Stack.Navigator>
     </NavigationContainer>
   );
