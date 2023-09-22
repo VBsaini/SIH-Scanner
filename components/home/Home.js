@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, BackHandler } from "react-native";
 import { Button } from "@react-native-material/core";
 import { Dimensions } from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
@@ -16,21 +16,21 @@ const customFonts = {
 export default function Home() {
   const [image, setImage] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const [status, requestPermission] = ImagePicker.useCameraPermissions();
+  const [permission, requestPermission] = ImagePicker.useCameraPermissions();
+
   useEffect(() => {
     (async () => {
       await loadAsync(customFonts);
       setFontsLoaded(true);
+      await requestPermission();
     })();
   }, []);
-  if (status?.status !== ImagePicker.PermissionStatus.GRANTED) {
-    return (
-      <View>
-        <Text>Permission Denied</Text>
-        <Button onPress={requestPermission} title="Request Permission" />
-      </View>
-    );
+
+  if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+    BackHandler.exitApp();
+    return null;
   }
+
   const takePhoto = async () => {
     try {
       const cameraResp = await ImagePicker.launchCameraAsync({
@@ -48,6 +48,7 @@ export default function Home() {
       console.log(e);
     }
   };
+
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
