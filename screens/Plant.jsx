@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   image: {
     width: 1600 / 7,
     height: 1200 / 7,
+    marginTop: 20,
   },
   error: {
     fontSize: 20,
