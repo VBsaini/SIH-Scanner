@@ -26,7 +26,7 @@ export default function Home(props) {
     })();
   }, []);
 
-  if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
+  if (permission?.status === ImagePicker.PermissionStatus.DENIED) {
     BackHandler.exitApp();
     return null;
   }
@@ -39,9 +39,9 @@ export default function Home(props) {
         quality: 1,
       });
 
-      if (!cameraResp.canceled) {
-        const { uri } = cameraResp.assets[0];
-        navigation.navigate("Plant", { imageUri: uri });
+      const image = cameraResp.assets[0];
+      if (image && !cameraResp.canceled) {
+        navigation.navigate("Plant", { image });
       }
     } catch (e) {
       console.log(e);
@@ -51,15 +51,16 @@ export default function Home(props) {
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      // allowsEditing: true,
       // aspect: [16, 9],
       cameraType: "back",
       quality: 1,
     });
 
-    if (!result.canceled) {
-      navigation.navigate("Plant", { imageUri: result.assets[0].uri });
+    const image = result.assets[0];
+    if (image && !result.canceled) {
+      navigation.navigate("Plant", { image });
     }
   };
 
