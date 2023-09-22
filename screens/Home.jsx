@@ -10,7 +10,7 @@ import * as ImagePicker from "expo-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 const customFonts = {
-  DancingScript: require("../../assets/fonts/DancingScript-Bold.ttf"),
+  DancingScript: require("../assets/fonts/DancingScript-Bold.ttf"),
 };
 
 export default function Home(props) {
