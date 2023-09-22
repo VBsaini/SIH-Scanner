@@ -3,13 +3,6 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import mime from "mime";
 import { Button } from "@react-native-material/core";
 
-const fetcher = async (uri) => {
-  if (!res.ok) throw new Error("Something went wrong");
-  const prediction = await res.json();
-
-  return prediction;
-};
-
 const Plant = (props) => {
   const { route, navigation } = props;
   const { image } = route.params;
@@ -28,7 +21,7 @@ const Plant = (props) => {
     });
 
     setLoading(true);
-    const res = fetch("http://192.168.0.101:5000/api/prediction", {
+    fetch("http://192.168.0.101:5000/api/prediction", {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",

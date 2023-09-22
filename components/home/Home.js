@@ -34,7 +34,6 @@ export default function Home(props) {
   const takePhoto = async () => {
     try {
       const cameraResp = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
       });
@@ -52,7 +51,6 @@ export default function Home(props) {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      // allowsEditing: true,
       // aspect: [16, 9],
       cameraType: "back",
       quality: 1,
