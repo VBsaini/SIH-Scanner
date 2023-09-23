@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image, BackHandler } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import { Button } from "@react-native-material/core";
 import { Dimensions } from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
