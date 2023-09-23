@@ -21,7 +21,9 @@ const Plant = (props) => {
     });
 
     setLoading(true);
-    fetch("http://192.168.0.101:5000/api/prediction", {
+    const base_url = process.env.EXPO_PUBLIC_API_ENDPOINT;
+    const url = `${base_url}/api/prediction`;
+    fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "multipart/form-data",
@@ -33,9 +35,14 @@ const Plant = (props) => {
         return res.json();
       })
       .then((data) => {
+        if (!data.data || data.errors) {
+          throw new Error(JSON.stringify(data.errors));
+        }
+        console.log(data.data);
         setPrediction(data.data);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error(error);
         setError(true);
       })
       .finally(() => {
@@ -51,7 +58,7 @@ const Plant = (props) => {
     );
   }
 
-  if (error) {
+  if (error || !prediction) {
     return (
       <View style={styles.container}>
         <Text style={styles.error}>
@@ -77,10 +84,24 @@ const Plant = (props) => {
       <Text style={{ fontSize: 20 }}>
         Plant Name:{" "}
         <Text style={{ fontWeight: "500", color: "#327a14" }}>
-          {prediction}
+          {prediction.name}
         </Text>
       </Text>
       <Image style={styles.image} source={{ uri }} />
+      <View style={{ marginHorizontal: 20 }}>
+        <Text style={{ fontSize: 20, fontWeight: "500" }}>
+          Properties of plant
+        </Text>
+        {prediction.uses.length > 0 ? (
+          prediction.uses.map((use, index) => (
+            <Text style={{ fontSize: 15, marginVertical: 5 }} key={index}>
+              {index + 1}.) {use}
+            </Text>
+          ))
+        ) : (
+          <Text>Comming soon</Text>
+        )}
+      </View>
     </View>
   );
 };
@@ -94,9 +115,9 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   image: {
-    width: 1600 / 7,
-    height: 1200 / 7,
-    marginTop: 20,
+    width: 224,
+    height: 224,
+    marginVertical: 20,
   },
   error: {
     fontSize: 20,

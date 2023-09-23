@@ -26,11 +26,6 @@ export default function Home(props) {
     })();
   }, []);
 
-  if (permission?.status === ImagePicker.PermissionStatus.DENIED) {
-    BackHandler.exitApp();
-    return null;
-  }
-
   const takePhoto = async () => {
     try {
       const cameraResp = await ImagePicker.launchCameraAsync({
@@ -71,46 +66,67 @@ export default function Home(props) {
         style={styles.logo}
         src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1854&q=80"
       />
-      <View style={styles.innerContainer}>
-        <Text style={styles.heading}>Zephire</Text>
-        <Text style={styles.text}>
-          Click the scan button below to scan your image
-        </Text>
-        <View style={{ marginHorizontal: 40, marginTop: 20, height: 36 }}>
+
+      {permission?.status === ImagePicker.PermissionStatus.GRANTED && (
+        <>
+          <View style={styles.innerContainer}>
+            <Text style={styles.heading}>Pyrus</Text>
+            <Text style={styles.text}>
+              Click the scan button below to scan your image
+            </Text>
+            <View style={{ marginHorizontal: 40, marginTop: 20, height: 36 }}>
+              <Button
+                style={{
+                  backgroundColor: "#327a14",
+                  flex: 1,
+                }}
+                titleStyle={{
+                  fontSize: 20,
+                  alignSelf: "center",
+                }}
+                onPress={takePhoto}
+                size="Large"
+                title="Scan"
+                leading={(props) => (
+                  <Icon
+                    name="scan-helper"
+                    style={{ marginRight: 5 }}
+                    {...props}
+                  />
+                )}
+              />
+            </View>
+            <View style={{ marginHorizontal: 40, marginTop: 20 }}>
+              <Button
+                color="#327a14"
+                titleStyle={{
+                  fontSize: 15,
+                  alignSelf: "center",
+                }}
+                size="large"
+                onPress={pickImage}
+                title="Pick Image from gallery"
+                leading={(props) => (
+                  <Icon name="image" style={{ marginRight: 5 }} {...props} />
+                )}
+              />
+            </View>
+          </View>
+          <StatusBar style={{ backgroundColor: "#327a14" }} />
+        </>
+      )}
+      {permission?.status === ImagePicker.PermissionStatus.DENIED && (
+        <View style={styles.innerContainer}>
+          <Text>Permission is required</Text>
           <Button
-            style={{
-              backgroundColor: "#327a14",
-              flex: 1,
+            onPress={() => {
+              console.log(permission?.status);
+              requestPermission();
             }}
-            titleStyle={{
-              fontSize: 20,
-              alignSelf: "center",
-            }}
-            onPress={takePhoto}
-            size="Large"
-            title="Scan"
-            leading={(props) => (
-              <Icon name="scan-helper" style={{ marginRight: 5 }} {...props} />
-            )}
+            title="Give permission"
           />
         </View>
-        <View style={{ marginHorizontal: 40, marginTop: 20 }}>
-          <Button
-            color="#327a14"
-            titleStyle={{
-              fontSize: 15,
-              alignSelf: "center",
-            }}
-            size="large"
-            onPress={pickImage}
-            title="Pick Image from gallery"
-            leading={(props) => (
-              <Icon name="image" style={{ marginRight: 5 }} {...props} />
-            )}
-          />
-        </View>
-      </View>
-      <StatusBar style={{ backgroundColor: "#327a14" }} />
+      )}
     </View>
   );
 }
@@ -147,7 +163,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: "gold",
-    fontSize: 80,
+    fontSize: 90,
     textAlign: "center",
     marginBottom: 20,
     fontFamily: "DancingScript",
