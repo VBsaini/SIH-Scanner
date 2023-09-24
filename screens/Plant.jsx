@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import mime from "mime";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "@react-native-material/core";
+import * as Clipboard from "expo-clipboard";   
+import {ToastAndroid} from 'react-native';
 
 const Plant = (props) => {
   const { route, navigation } = props;
@@ -126,6 +128,11 @@ const Plant = (props) => {
         </Text>
       </Text>
       <Image style={styles.image} source={{ uri }} />
+      <View style={{ margin: 20 }}>
+        <Button color="secondary" title="Copy Name" titleStyle={{color:"black", marginHorizontal: 20}} onPress={() => {
+          Clipboard.setStringAsync(prediction.name)
+          ToastAndroid.show('Name Copied', ToastAndroid.SHORT);}} />
+      </View>
       <View style={{ marginHorizontal: 20 }}>
         <Text style={{ fontSize: 20, fontWeight: "500" }}>
           Properties of plant
