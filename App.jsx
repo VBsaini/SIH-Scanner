@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import { RootSiblingParent } from 'react-native-root-siblings';
 // Screens
 import { Home, Plant } from "./screens";
 
@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return (
+    <RootSiblingParent>
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
@@ -19,6 +20,7 @@ function App() {
         <Stack.Screen name="Plant" component={Plant} />
       </Stack.Navigator>
     </NavigationContainer>
+    </RootSiblingParent>
   );
 }
 
