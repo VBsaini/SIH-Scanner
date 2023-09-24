@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import mime from "mime";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "@react-native-material/core";
 
 const Plant = (props) => {
@@ -11,8 +12,46 @@ const Plant = (props) => {
   const [prediction, setPrediction] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [history, setHistory, getHistory] = useState([]);
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("historyData");
+      if (value !== null) {
+        setHistory(JSON.parse(value));
+        console.log("value", history);
+        return JSON.parse(value);
+      }
+      return [];
+    } catch (e) {
+      alert("Failed to fetch the input from storage");
+    }
+  };
+  // setvalue((state) => {
+  //   return state;
+  // });
+  const storeData = async (value) => {
+    try {
+      let his = await getData();
+      let hisD = [...his];
+      hisD.length >= 3?  his.length = 3 : null;
+      setHistory(hisD);
+      let data = [value, ...his];
+      data.length >= 3?  data.length = 3 : null;
+      console.log("history ====== ", data);
+      const jsonValue = JSON.stringify(data);
+      await AsyncStorage.setItem("historyData", jsonValue);
+    } catch (e) {
+      console.log("history e", e);
+      // saving error
+    }
+  };
+  const clearAsyncStorage = async () => {
+    setHistory([]);
+    AsyncStorage.clear();
+  };
   useEffect(() => {
+    // clearAsyncStorage();
+    getData();
     const body = new FormData();
     body.append("image", {
       uri: uri,
@@ -22,7 +61,7 @@ const Plant = (props) => {
 
     setLoading(true);
     const base_url = process.env.EXPO_PUBLIC_API_ENDPOINT;
-    const url = `${base_url}/api/prediction`;
+    const url = `https://sih-server.onrender.com/api/prediction`;
     fetch(url, {
       method: "POST",
       headers: {
@@ -35,11 +74,12 @@ const Plant = (props) => {
         return res.json();
       })
       .then((data) => {
-        if (!data.data || data.errors) {
-          throw new Error(JSON.stringify(data.errors));
+        if (!data?.data || data?.errors) {
+          throw new Error(JSON.stringify(data?.errors));
         }
-        console.log(data.data);
-        setPrediction(data.data);
+        // console.log(data?.data);
+        storeData(data?.data);
+        setPrediction(data?.data);
       })
       .catch((error) => {
         console.error(error);
@@ -57,7 +97,6 @@ const Plant = (props) => {
       </View>
     );
   }
-
   if (error || !prediction) {
     return (
       <View style={styles.container}>
@@ -78,7 +117,6 @@ const Plant = (props) => {
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 20 }}>
@@ -100,6 +138,16 @@ const Plant = (props) => {
           ))
         ) : (
           <Text>Comming soon</Text>
+        )}
+        {history.length != 0 && (
+          <View style={{ backgroundColor: "#327a14", padding: 10 }}>
+            {history.map((item, index) => (
+              <Text style={{ color: "white" }} key={index}>
+                {item.name}
+              </Text>
+            ))}
+            <Button color="error" title="Clear History" onPress={clearAsyncStorage} />
+          </View>
         )}
       </View>
     </View>
