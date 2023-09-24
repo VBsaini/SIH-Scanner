@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import mime from "mime";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "@react-native-material/core";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 
 const Plant = (props) => {
   const { route, navigation } = props;
@@ -12,7 +13,8 @@ const Plant = (props) => {
   const [prediction, setPrediction] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [history, setHistory, getHistory] = useState([]);
+  const [history, setHistory] = useState([]);
+
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem("historyData");
@@ -26,17 +28,15 @@ const Plant = (props) => {
       alert("Failed to fetch the input from storage");
     }
   };
-  // setvalue((state) => {
-  //   return state;
-  // });
+
   const storeData = async (value) => {
     try {
       let his = await getData();
       let hisD = [...his];
-      hisD.length >= 3?  his.length = 3 : null;
+      hisD.length >= 3 ? (his.length = 3) : null;
       setHistory(hisD);
       let data = [value, ...his];
-      data.length >= 3?  data.length = 3 : null;
+      data.length >= 3 ? (data.length = 3) : null;
       console.log("history ====== ", data);
       const jsonValue = JSON.stringify(data);
       await AsyncStorage.setItem("historyData", jsonValue);
@@ -45,12 +45,13 @@ const Plant = (props) => {
       // saving error
     }
   };
+
   const clearAsyncStorage = async () => {
     setHistory([]);
-    AsyncStorage.clear();
+    await AsyncStorage.clear();
   };
+
   useEffect(() => {
-    // clearAsyncStorage();
     getData();
     const body = new FormData();
     body.append("image", {
@@ -77,7 +78,6 @@ const Plant = (props) => {
         if (!data?.data || data?.errors) {
           throw new Error(JSON.stringify(data?.errors));
         }
-        // console.log(data?.data);
         storeData(data?.data);
         setPrediction(data?.data);
       })
@@ -97,6 +97,7 @@ const Plant = (props) => {
       </View>
     );
   }
+
   if (error || !prediction) {
     return (
       <View style={styles.container}>
@@ -117,6 +118,7 @@ const Plant = (props) => {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 20 }}>
@@ -127,26 +129,48 @@ const Plant = (props) => {
       </Text>
       <Image style={styles.image} source={{ uri }} />
       <View style={{ marginHorizontal: 20 }}>
-        <Text style={{ fontSize: 20, fontWeight: "500" }}>
-          Properties of plant
-        </Text>
         {prediction.uses.length > 0 ? (
-          prediction.uses.map((use, index) => (
-            <Text style={{ fontSize: 15, marginVertical: 5 }} key={index}>
-              {index + 1}.) {use}
+          <>
+            <Text style={{ fontSize: 20, fontWeight: "500" }}>
+              Properties of plant
             </Text>
-          ))
+            {prediction.uses.map((use, index) => (
+              <Text style={{ fontSize: 15, marginVertical: 5 }} key={index}>
+                {index + 1}.) {use}
+              </Text>
+            ))}
+          </>
         ) : (
-          <Text>Comming soon</Text>
+          <Text style={{ marginVertical: 15 }}>
+            No uses yet will be added soon
+          </Text>
         )}
         {history.length != 0 && (
-          <View style={{ backgroundColor: "#327a14", padding: 10 }}>
+          <View
+            style={{
+              backgroundColor: "#78ba5d",
+              padding: 20,
+              borderRadius: 10,
+              marginTop: 10,
+            }}
+          >
             {history.map((item, index) => (
-              <Text style={{ color: "white" }} key={index}>
+              <Text
+                style={{ color: "white", marginVertical: 4, fontWeight: "500" }}
+                key={index}
+              >
                 {item.name}
               </Text>
             ))}
-            <Button color="error" title="Clear History" onPress={clearAsyncStorage} />
+            <Button
+              color="error"
+              title="Clear History"
+              style={{ marginTop: 10 }}
+              leading={(props) => (
+                <Icon name="trash-can" style={{ marginRight: 5 }} {...props} />
+              )}
+              onPress={clearAsyncStorage}
+            />
           </View>
         )}
       </View>
