@@ -4,7 +4,22 @@ import mime from "mime";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "@react-native-material/core";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import * as Clipboard from "expo-clipboard"
+import Toast from "react-native-root-toast";
 
+notify = (message) => {
+  let toast = Toast.show('Text Copied', {
+    duration: Toast.durations.SHORT,
+  });
+  // if (Platform.OS != 'android') {
+  //     // Snackbar.show({
+  //     //     text: message,
+  //     //     duration: Snackbar.LENGTH_SHORT,
+  //     // });
+  // } else {
+  //     ToastAndroid.show(message, ToastAndroid.SHORT);
+  // }
+}
 const Plant = (props) => {
   const { route, navigation } = props;
   const { image } = route.params;
@@ -128,6 +143,11 @@ const Plant = (props) => {
         </Text>
       </Text>
       <Image style={styles.image} source={{ uri }} />
+      <View style={{ margin: 20 }}>
+        <Button color="secondary" title="Copy Name" titleStyle={{color:"black", marginHorizontal: 20}} onPress={() => {
+          Clipboard.setStringAsync(prediction.name);
+           notify("Name Copied");``}} />
+      </View>
       <View style={{ marginHorizontal: 20 }}>
         {prediction.uses.length > 0 ? (
           <>
